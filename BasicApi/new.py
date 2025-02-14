@@ -104,6 +104,16 @@ async def get_post(id: int, response: Response):
     response.status_code = status.HTTP_404_NOT_FOUND
     return {"message": f"Post with id {id} was not found"} 
 
+## Using HTTP Exceptions instead 
+@app.get("/posts__/{id}", response_model = Union[Post, dict])  # Allow dict for error response
+async def get_post(id: int, response: Response):
+    post = next((post for post in posts_db if post.id == id), None)
+
+    if post:
+        return post  # ✅ FastAPI converts it to JSON
+
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                        detail=f"Post with id {id} was not found")
 
 @app.get("/post_latest")
 async def latest():
