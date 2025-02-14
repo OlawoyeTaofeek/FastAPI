@@ -18,9 +18,15 @@ posts_db: List[Post] = []
 
 # Add initial sample posts
 posts_db.extend([
-    Post(id=1, author="John Doe", title="FastAPI Guide", content="FastAPI makes APIs easy!", published_date=datetime.datetime(2025, 2, 1, 10, 30, 45), rating=4.5),
-    Post(id=2, author="Alice", title="Machine Learning", content="ML is transforming the world.", published_date=datetime.datetime(2025, 2, 2, 12, 15, 30), rating=4.8),
-    Post(id=3, author="Bob", title="Introduction to SQL", content="SQL is the backbone of data management.", published_date=datetime.datetime(2025, 2, 3, 9, 45, 10), rating=4.2),
+    Post(id=1, author="John Doe", title="FastAPI Guide", 
+         content="FastAPI makes APIs easy!", 
+         published_date=datetime.datetime(2025, 2, 1, 10, 30, 45), rating=4.5),
+    Post(id=2, author="Alice", title="Machine Learning", 
+         content="ML is transforming the world.", 
+         published_date=datetime.datetime(2025, 2, 2, 12, 15, 30), rating=4.8),
+    Post(id=3, author="Bob", title="Introduction to SQL", 
+         content="SQL is the backbone of data management.", 
+         published_date=datetime.datetime(2025, 2, 3, 9, 45, 10), rating=4.2),
 ])
 
 # POST request - Create multiple posts
@@ -43,4 +49,36 @@ async def get_posts():
 
 @app.get("/posts/{id}")
 async def get_post(id):
-    ...
+    for post in posts_db:
+        if post.id == int(id):
+            return {
+                "message": "success",
+                "post": post.model_dump()}
+            
+
+@app.get("/post/{id}")
+async def get_post(id: int):
+    post = next((post for post in posts_db if post.id == int(id)), None)
+    
+    if post:
+        return {
+            "message": "success",
+            "post": post.model_dump()
+        }
+    
+    return {"message": "Post not found"}
+
+@app.get("/post_latest")
+async def latest():
+    if not posts_db:  # Check if posts_db is empty
+        return {"message": "No posts available"}
+
+    latest_post = max(posts_db, key=lambda post: post.published_date, default=None)
+
+    if latest_post is None:
+        return {"message": "No posts found"}
+
+    return {
+        "message": "success",
+        "post": latest_post.model_dump()
+    }
