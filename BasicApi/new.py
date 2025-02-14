@@ -58,7 +58,7 @@ async def get_post(id):
 
 @app.get("/post/{id}")
 async def get_post(id: int):
-    post = next((post for post in posts_db if post.id == int(id)), None)
+    post = next((post for post in posts_db if post.id ==id ), None)
     
     if post:
         return {
@@ -82,3 +82,7 @@ async def latest():
         "message": "success",
         "post": latest_post.model_dump()
     }
+    
+@app.put("/post/{id}")
+async def update_post(id: int, updated_post: Post):
+    ...
