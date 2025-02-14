@@ -129,7 +129,7 @@ async def get_post(id: int, response: Response):
 
 ## Using HTTP Exceptions instead 
 @app.get("/posts__/{id}", response_model = Union[Post, dict])  # Allow dict for error response
-async def get_post(id: int, response: Response):
+async def get_post(id: int):
     post = next((post for post in posts_db if post.id == id), None)
 
     if post:
@@ -213,5 +213,21 @@ async def update_post(id: int, updated_data: PostUpdate):
             for key, value in updated_fields.items():
                 setattr(post, key, value)
             return {"message": "success", "post": post.model_dump()}
+
+    raise HTTPException(status_code=404, detail=f"Post with id {id} not found")
+
+@app.patch("/post_/{id}")
+async def update_post(id: int, updated_data: PostUpdate):
+    for index, post in enumerate(posts_db):
+        if post.id == id:
+            updated_fields = updated_data.model_dump(exclude_unset=True)
+
+            # Convert Pydantic model to dictionary, update fields
+            updated_post_data = post.model_dump()  # Convert to dict
+            updated_post_data.update(updated_fields)  # Apply updates
+
+            # Replace the existing post with an updated instance
+            posts_db[index] = Post(**updated_post_data)  # Recreate the object
+            return {"message": "success", "post": posts_db[index].model_dump()}
 
     raise HTTPException(status_code=404, detail=f"Post with id {id} not found")
