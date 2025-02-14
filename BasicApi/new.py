@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel, Field
 import datetime
 from typing import List, Optional, Union
-from fastapi import HTTPException, status, Response, Depends
+from fastapi import HTTPException, status, Response
 
 app = FastAPI()
 ## Basic CRUD Operations
