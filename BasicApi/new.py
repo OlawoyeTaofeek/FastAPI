@@ -39,6 +39,22 @@ async def create_posts(new_posts: List[Post]):
         "message": "success",
         "posts": [post.model_dump() for post in new_posts]
     }
+    
+@app.post("/create_posts", status_code=201)
+async def create_posts(new_posts: List[Post]):
+    posts_db.extend(new_posts)  # Add new posts to storage
+    return {
+        "message": "success",
+        "posts": [post.model_dump() for post in new_posts]
+    }
+
+@app.post("/create_posts_", status_code=status.HTTP_201_CREATED)
+async def create_posts(new_posts: List[Post]):
+    posts_db.extend(new_posts)  # Add new posts to storage
+    return {
+        "message": "success",
+        "posts": [post.model_dump() for post in new_posts]
+    }
 
 # GET request - Retrieve all posts
 @app.get("/getposts")
