@@ -14,6 +14,13 @@ class Post(BaseModel):
     content: str
     published_date: datetime.datetime = Field(default_factory=datetime.datetime.now)
     rating: Optional[float] = None  # Default rating is None if not provided
+    
+# Schema for partial update (all fields optional)
+class PostUpdate(BaseModel):
+    author: Optional[str] = None
+    title: Optional[str] = None
+    content: Optional[str] = None
+    rating: Optional[float] = None
 
 # Pre-filled in-memory storage for posts
 posts_db: List[Post] = []
@@ -145,7 +152,9 @@ async def latest():
         "message": "success",
         "post": latest_post.model_dump()
     }
-    
+
+
+# Update
 @app.put("/post/{id}")
 async def update_post(id: int, updated_post: Post):
     for i, post in enumerate(posts_db):
@@ -183,6 +192,7 @@ async def update_post(id: int, updated_post: Post):
     return {"message": "Post not found"}
 
 
+# Delete
 @app.delete("/delete_post/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_post(id: int):
     for i, post in enumerate(posts_db):
@@ -192,3 +202,16 @@ async def delete_post(id: int):
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                         detail=f"Post with id {id} was not found"
     )    
+    
+    
+@app.patch("/post/{id}")
+async def update_post(id: int, updated_data: PostUpdate):
+    for post in posts_db:
+        if post.id == id:
+            # Update only provided fields
+            updated_fields = updated_data.model_dump(exclude_unset=True)
+            for key, value in updated_fields.items():
+                setattr(post, key, value)
+            return {"message": "success", "post": post.model_dump()}
+
+    raise HTTPException(status_code=404, detail=f"Post with id {id} not found")
