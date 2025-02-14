@@ -38,7 +38,7 @@ FastAPI is a **modern, high-performance web framework** for building APIs with P
 ```bash
 pip install fastapi uvicorn
 ```
-
+---
 ## 🛠️ Create a Virtual Environment  
 To set up a virtual environment for your FastAPI project, run the following commands:  
 
@@ -47,3 +47,5 @@ python -m venv api_env
 source api_env/bin/activate  # For Mac/Linux
 api_env\Scripts\activate     # For Windows
 ```
+
+---
