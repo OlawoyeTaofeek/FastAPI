@@ -181,3 +181,14 @@ async def update_post(id: int, updated_post: Post):
         return {"message": "success", "post": post.model_dump()}
     
     return {"message": "Post not found"}
+
+
+@app.delete("/delete_post/{id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_post(id: int):
+    for i, post in enumerate(posts_db):
+        if post.id == id:
+            del posts_db[i]
+            return {"message": "successful, post was deleted"}
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                        detail=f"Post with id {id} was not found"
+    )    
