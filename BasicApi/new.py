@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 import datetime
-from typing import List, Optional
+from typing import List, Optional, Union
+from fastapi import HTTPException, status, Response, Depends
 
 app = FastAPI()
+## Basic CRUD Operations
 
 class Post(BaseModel):
     id: int
@@ -57,7 +59,8 @@ async def get_post(id):
             
 
 @app.get("/post/{id}")
-async def get_post(id: int):
+# Response: Setting The status code yourself
+async def get_post(id: int, response : Response):
     post = next((post for post in posts_db if post.id ==id ), None)
     
     if post:
@@ -65,8 +68,42 @@ async def get_post(id: int):
             "message": "success",
             "post": post.model_dump()
         }
+    else:
+        response.status_code = 404
+        return {"message": "Post not found"}
     
-    return {"message": "Post not found"}
+## Method 2: using status
+## response_model : 
+    #   1. Automatic Data Validation & Serialization
+         ## Without response_model: You manually serialize the response using .model_dump().
+    #   2. Automatic Error Handling & Validation
+         ## If the provided data doesn't match the schema, FastAPI will automatically return a 422 response with an appropriate error message.
+         # return Post.from_orm(next((post for post in posts_db if post.id == id), None))
+    # 3. Performance Optimization (Excludes Extra Fields)
+         ## If response_model is used, FastAPI removes any extra fields that are not defined in the model.
+    # 4. Security: Prevents Leaking Sensitive Data
+         
+@app.get("/post_/{id}", response_model=Post)
+async def get_post(id: int, response: Response):
+    post = next((post for post in posts_db if post.id == id), None)
+    
+    if post:
+        return post  # FastAPI auto-converts Pydantic model to JSON
+
+    response.status_code = status.HTTP_404_NOT_FOUND
+    return {"message": f"Post with id {id} was not found"}
+# Yes, when you search for an id that doesn't exist none is returned! The issue is that None does not match the response_model=Post, so FastAPI throws an error instead of returning your custom message.
+
+@app.get("/posts_/{id}", response_model = Union[Post, dict])  # Allow dict for error response
+async def get_post(id: int, response: Response):
+    post = next((post for post in posts_db if post.id == id), None)
+
+    if post:
+        return post  # ✅ FastAPI converts it to JSON
+
+    response.status_code = status.HTTP_404_NOT_FOUND
+    return {"message": f"Post with id {id} was not found"} 
+
 
 @app.get("/post_latest")
 async def latest():
@@ -85,4 +122,36 @@ async def latest():
     
 @app.put("/post/{id}")
 async def update_post(id: int, updated_post: Post):
-    ...
+    for i, post in enumerate(posts_db):
+        if post.id == id:
+            posts_db[i] = updated_post
+            return {"message": "success", "post": updated_post.model_dump()}
+    
+    return {"message": "Post not found"}
+
+@app.put("/post/{id}")
+async def update_post(id: int, updated_post: Post):
+    post = next((p for p in posts_db if p.id == id), None)
+
+    if post:
+        posts_db.remove(post)  # Remove the old post
+        posts_db.append(updated_post)  # Add the updated post
+        return {"message": "success", "post": updated_post.model_dump()}
+    
+    return {"message": "Post not found"}
+
+
+@app.put("/post/{id}")
+async def update_post(id: int, updated_post: Post):
+    post = next((p for p in posts_db if p.id == id), None)
+
+    if post:
+        post.author = updated_post.author
+        post.title = updated_post.title
+        post.content = updated_post.content
+        post.published_date = updated_post.published_date
+        post.rating = updated_post.rating
+        
+        return {"message": "success", "post": post.model_dump()}
+    
+    return {"message": "Post not found"}
