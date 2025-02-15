@@ -95,6 +95,39 @@ docker run -p 8000:8000 fastapi-app
 ---
 
 ## 🐍 Python Fundamentals for FastAPI
+
+### 🔤 Type Casting and Typing in Python  
+
+Python allows for **explicit** and **implicit** type conversion.  
+
+### 🔹 Implicit Type Casting  
+Python automatically converts smaller data types to larger ones.  
+```python
+num_int = 5  
+num_float = 2.5  
+result = num_int + num_float  # int is implicitly converted to float  
+print(result)  # Output: 7.5
+print(type(result))  # Output: <class 'float'>
+```
+## 🔠 Python Typing (Type Hints)
+### 📌 Basic Type Hints
+```python
+def greet(name: str) -> str:
+    return f"Hello, {name}!"
+
+print(greet("Taofeek"))  # Output: Hello, Taofeek
+```
+
+### 📌 Typing with Lists, Tuples, and Dicts
+```python
+from typing import List, Tuple, Dict  
+
+def process_numbers(numbers: List[int]) -> Tuple[int, int]:  
+    return min(numbers), max(numbers)
+
+print(process_numbers([3, 1, 4, 1, 5]))  # Output: (1, 5)
+```
+
 ### 🔹 OOP in Python
 ```python
 class Post:
