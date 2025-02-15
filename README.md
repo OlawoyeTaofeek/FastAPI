@@ -90,3 +90,27 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 docker build -t fastapi-app .
 docker run -p 8000:8000 fastapi-app
 ```
+
+
+---
+
+## 🐍 Python Fundamentals for FastAPI
+### 🔹 OOP in Python
+```python
+class Post:
+    def __init__(self, title, content):
+        self.title = title
+        self.content = content
+    
+    def display(self):
+        return f"{self.title}: {self.content}"
+```
+
+## 🔹 Pydantic for Data Validation
+```python
+from pydantic import BaseModel
+
+class PostSchema(BaseModel):
+    title: str
+    content: str
+```
