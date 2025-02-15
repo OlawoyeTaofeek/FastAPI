@@ -127,6 +127,16 @@ def process_numbers(numbers: List[int]) -> Tuple[int, int]:
 
 print(process_numbers([3, 1, 4, 1, 5]))  # Output: (1, 5)
 ```
+### 📌 Typing with Optional and Union
+```python
+from typing import Optional, Union  
+
+def get_value(flag: bool) -> Optional[Union[int, str]]:  
+    return 42 if flag else None  
+
+print(get_value(True))  # Output: 42
+print(get_value(False))  # Output: None
+```
 
 ### 🔹 OOP in Python
 ```python
