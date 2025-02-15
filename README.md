@@ -67,3 +67,9 @@ app = FastAPI()
 def read_root():
     return {"message": "Hello, FastAPI!"}
 ```
+
+---
+### 🔹 Run the API
+```bash
+uvicorn main:app --reload
+```
