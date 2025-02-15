@@ -47,5 +47,23 @@ python -m venv api_env
 source api_env/bin/activate  # For Mac/Linux
 api_env\Scripts\activate     # For Windows
 ```
-
 ---
+
+### 🔹 Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+---
+
+## 🖥️ Building APIs with FastAPI
+
+### 🔹 Create a Simple API
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"message": "Hello, FastAPI!"}
+```
