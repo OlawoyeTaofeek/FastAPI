@@ -130,6 +130,7 @@ class PostSchema(BaseModel):
 📧 Email: [your-email@example.com](oladipupoolawoye26@gmail.com)  
 <!-- 🐦 Twitter: [@yourhandle](https://twitter.com/yourhandle)   -->
 📂 GitHub: [OlawoyeTaofeek](https://github.com/OlawoyeTaofeek)
+
 📂 LinkedIn: [LinkedIn](https://www.linkedin.com/in/opeyemi-oladipupo-a7862021a/)  
 
 ---
