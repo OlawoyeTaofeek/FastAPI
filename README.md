@@ -114,3 +114,24 @@ class PostSchema(BaseModel):
     title: str
     content: str
 ```
+
+--- 
+## 📜 Additional Resources  
+
+- [FastAPI Documentation](https://fastapi.tiangolo.com/)  
+- [Docker Documentation](https://docs.docker.com/)  
+- [AWS ECR Guide](https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html)  
+
+---
+
+## 📌 Author  
+
+👤 **Taofeek Olawoye**  
+📧 Email: [your-email@example.com](oladipupoolawoye26@gmail.com)  
+<!-- 🐦 Twitter: [@yourhandle](https://twitter.com/yourhandle)   -->
+📂 GitHub: [OlawoyeTaofeek](https://github.com/OlawoyeTaofeek)
+📂 LinkedIn: [LinkedIn](https://www.linkedin.com/in/opeyemi-oladipupo-a7862021a/)  
+
+---
+🔥 Enjoy learning FastAPI? Give this repo a ⭐ and share with others! 🚀  
+
