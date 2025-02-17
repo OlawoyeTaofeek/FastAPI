@@ -65,3 +65,9 @@ DO UPDATE SET
 -- If john_doe already exists, only the email and age will be updated.
 
 SELECT * FROM public."users";
+
+
+-- INSERT INTO users (username, email, age) 
+-- VALUES ('john_doe', 'john.doe@example.com', 30)
+-- ON CONFLICT (username) DO NOTHING;
+
