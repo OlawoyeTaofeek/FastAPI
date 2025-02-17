@@ -12,8 +12,6 @@ SELECT * from public."Products" ORDER BY price ASC;
 -- 4. Limiting the number of rows to 10
 SELECT * from public."Products" ORDER BY price ASC LIMIT 10;
 
--- select specific columns
-
 -- 5. Selecting a specific column (product_name)
 SELECT name from public."Products";
 
