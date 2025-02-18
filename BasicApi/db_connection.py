@@ -13,7 +13,7 @@ db_config = config["database"]
 try:
     conn = psycopg2.connect(
         host=db_config['host'],
-        database=db_config['database'],
+        database=db_config['name'],
         user=db_config['user'],
         password=db_config['password'],
         cursor_factory=RealDictCursor
