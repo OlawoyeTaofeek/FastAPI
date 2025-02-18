@@ -114,3 +114,28 @@ def delete_post(post_id: int):
                             detail=f"Post with id {post_id} not found")
     
     return Response(status_code=status.HTTP_204_NO_CONTENT)  # ✅ Return 204 No Content
+
+
+@app.put("/posts/{post_id}", status_code=status.HTTP_201_CREATED)
+def update_post(post_id: int, post: Post):
+    conn = get_db_connection()
+    if conn is None:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
+                            detail="Database connection failed.")
+    
+    cursor = conn.cursor()
+    query = '''
+            UPDATE "Posts"
+            SET title=%s, content=%s, published=%s
+            WHERE id = %s RETURNING *;'''
+    cursor.execute(query, (post.title, post.content, post.published, post_id))
+    updated_post = cursor.fetchone()
+    conn.commit()
+    
+    if updated_post is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
+                            detail=f"Post with id {post_id} not found")
+    
+    return {
+        'data': updated_post,
+    }
