@@ -1,13 +1,21 @@
-# Connecting to database using psycopg2
+import os
+import yaml
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
+# Load configuration from YAML file
+with open(r"C:\Users\user\Desktop\ApiDevelopment\ApiDevelopment\ORM\config.yaml", "r") as file:
+    config = yaml.safe_load(file)
+
+db_config = config["database"]
+
+# Connecting to PostgreSQL using psycopg2
 try:
     conn = psycopg2.connect(
-        host='localhost',
-        database='FastAPI',
-        user='postgres',
-        password='oladipupo',
+        host=db_config['host'],
+        database=db_config['database'],
+        user=db_config['user'],
+        password=db_config['password'],
         cursor_factory=RealDictCursor
     )
     cur = conn.cursor()
