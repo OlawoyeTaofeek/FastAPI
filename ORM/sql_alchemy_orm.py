@@ -1,0 +1,27 @@
+from sqlalchemy import Column, Integer, String, ForeignKey
+from database import Base, engine
+from sqlalchemy.orm import relationship
+
+
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True, index=True) # Unique identifier for each user
+    name = Column(String, index=True) # User's full name
+    username = Column(String, unique=True, index=True) # User's unique username
+    email = Column(String, unique=True, index=True) # User's unique email address
+    password_hash = Column(String) # Hashed version of the user's password
+    role_id = Column(Integer, ForeignKey('roles.id')) # Foreign key to the 'roles' table, referencing the role ID
+    role = relationship('Role', back_populates='users') # Relationship with the 'roles' table, allowing one-to-many relationship between 'users' and 'roles'
+    
+class Role(Base):
+    __tablename__ = 'roles'
+    id = Column(Integer, primary_key=True, index=True) # Unique identifier for each role
+    name = Column(String, unique=True, index=True) # Role's name
+    description = Column(String) # Description of the role
+    users = relationship('User', back_populates='role') # Relationship with the 'users' table, allowing one-to-many relationship between 'roles' and 'users'
+    
+
+# Explanation:
+   ## ForeignKey('roles.id') establishes a foreign key link between User.role_id and Role.id.
+   ## relationship('Role', back_populates='users') establishes the ORM relationship.
+   ## back_populates='role' ensures bidirectional access between User and Role
