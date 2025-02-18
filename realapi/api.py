@@ -69,3 +69,48 @@ def create_post(post: Post):
     return {
         'data': new_post,
     }
+
+@app.get("/posts/{post_id}")
+def get_post(post_id: int):
+    conn = get_db_connection()
+    if conn is None:
+        return {"message": "Database connection failed."}
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    query = '''
+          SELECT * 
+          FROM "Posts" 
+          WHERE id = %s;
+          '''
+    cursor.execute(query, (post_id,))
+    post = cursor.fetchone() 
+    cursor.close()  # Now close the cursor after fetching data
+    if post is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
+                        detail="Post not found")
+    return {
+        'data': post,
+    }
+    
+## delete post
+@app.delete("/posts/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_post(post_id: int):
+    conn = get_db_connection()
+    if conn is None:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
+                            detail="Database connection failed.")
+
+    cursor = conn.cursor()
+    query = '''
+          DELETE FROM "Posts" 
+          WHERE id = %s RETURNING *;
+          '''
+    cursor.execute(query, (post_id,))
+
+    deleted_post = cursor.fetchone()  
+    conn.commit()
+
+    if deleted_post is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
+                            detail=f"Post with id {post_id} not found")
+    
+    return Response(status_code=status.HTTP_204_NO_CONTENT)  # ✅ Return 204 No Content
