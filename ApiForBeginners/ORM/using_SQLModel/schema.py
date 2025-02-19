@@ -15,3 +15,14 @@ class UserResponse(UserBase):
 
     class Config:
         from_attributes = True  # Needed for ORM-like behavior
+
+class RoleCreate(BaseModel):
+    name: str
+    description: str
+
+
+class RoleResponse(RoleCreate):
+    id: int
+
+    class Config:
+        from_attributes = True
