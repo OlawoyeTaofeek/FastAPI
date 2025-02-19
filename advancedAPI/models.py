@@ -11,5 +11,5 @@ class Post(Base):
     content: Mapped[str] = mapped_column(String, nullable=False)
     published: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime.datetime] = mapped_column(
-        DateTime, default=lambda: datetime.datetime.now(datetime.UTC)
+        DateTime, default=lambda: datetime.datetime.now(datetime.timezone.utc)
     )

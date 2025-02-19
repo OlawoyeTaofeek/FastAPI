@@ -7,7 +7,7 @@ from schema import PostCreate, PostResponse
         
 app = FastAPI()
 
-@app.post("/posts/", response_model=PostResponse, status_code=status.HTTP_201_CREATED)
+@app.post("/posts", response_model=PostResponse, status_code=status.HTTP_201_CREATED)
 def create_post(post: PostCreate, db: Session = Depends(get_db)):
     db_post = db.query(Post).filter(Post.title == post.title).first()
     if db_post:
