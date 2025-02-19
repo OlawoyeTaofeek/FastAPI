@@ -8,7 +8,7 @@ from psycopg2.extras import RealDictCursor
 app = FastAPI()
 
 # Load configuration from YAML file
-with open(r"C:\Users\user\Desktop\ApiDevelopment\ApiDevelopment\ORM\config.yaml", "r") as file:
+with open(r"C:\Users\user\Desktop\ApiDevelopment\ApiTutorial\ApiForBeginners\ORM\config.yaml", "r") as file:
     config = yaml.safe_load(file)
 
 db_config = config["database"]

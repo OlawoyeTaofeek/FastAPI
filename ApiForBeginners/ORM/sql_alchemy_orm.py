@@ -11,7 +11,7 @@ class User(Base):
     email = Column(String, unique=True, index=True) # User's unique email address
     password_hash = Column(String) # Hashed version of the user's password
     role_id = Column(Integer, ForeignKey('roles.id')) # Foreign key to the 'roles' table, referencing the role ID
-    role = relationship('Role', back_populates='users', cascade="all, delete-orphan") # Relationship with the 'roles' table, allowing one-to-many relationship between 'users' and 'roles'
+    role = relationship('Role', back_populates='users') # Relationship with the 'roles' table, allowing one-to-many relationship between 'users' and 'roles'
     """cascade="all, delete-orphan": This defines how changes 
     to the User affect related Address records. Specifically, 
     when a User is deleted, all their associated Address records 
@@ -24,7 +24,7 @@ class Role(Base):
     id = Column(Integer, primary_key=True, index=True) # Unique identifier for each role
     name = Column(String, unique=True, index=True) # Role's name
     description = Column(String) # Description of the role
-    users = relationship('User', back_populates='role') # Relationship with the 'users' table, allowing one-to-many relationship between 'roles' and 'users'
+    users = relationship('User', back_populates='role', cascade="all, delete") # Relationship with the 'users' table, allowing one-to-many relationship between 'roles' and 'users'
     
 
 # Explanation:
@@ -62,7 +62,7 @@ class User(Base):
     role_id: Mapped[int] = mapped_column(Integer, ForeignKey('roles.id'))  # Foreign key to the 'roles' table, referencing the role ID
 
     # Relationship to the Role model with mapping type hint
-    role: Mapped["Role"] = relationship('Role', back_populates='users', cascade="all, delete-orphan")
+    role: Mapped["Role"] = relationship('Role', back_populates='users')
 
     def __repr__(self) -> str:
         return f"User(id={self.id!r}, name={self.name!r}, username={self.username!r}, email={self.email!r})"
