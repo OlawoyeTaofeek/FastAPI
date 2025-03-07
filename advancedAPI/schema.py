@@ -15,3 +15,6 @@ class PostResponse(PostBase):
 
     class Config:
         from_attributes = True  # Converts SQLAlchemy models to Pydantic models
+        
+class PostUpdate(PostBase):
+    pass
